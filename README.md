@@ -1,5 +1,19 @@
-# Vue 3 + Vite
+# Cosmic Almanac
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+🌌 A calendar web app bridging Western Astronomy and Indian Panchang.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🚀 Live Website
+
+[Your Live Link Here](https://your-live-site-link.com)
+
+## 📦 Features
+
+- Full-featured calendar with date selection
+- Shows real Western astronomy/space events for each day
+- Displays Indian Panchang (Tithi, Nakshatra, Yoga) for each date
+- "Myth vs Science" floating widget with daily facts
+- Modern, responsive design
+
+## 🛠️ Setup Guide
+
+1. **Clone the repo:**
