@@ -78,15 +78,29 @@ button:focus-visible {
   }
 }
 
-.calendar-weekdays-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  margin-bottom: 0.5rem;
+.hover-expand {
+  position: relative;
+  overflow: hidden;
+  max-height: 160px; /* enough for title + 3 lines */
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
 }
-.weekday {
-  font-weight: 600;
-  color: #fff;
-  padding: 0.5rem 0;
+.hover-expand:hover,
+.hover-expand:focus-within {
+  max-height: 600px; /* enough for all content */
 }
+
+.expand-content {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  margin-top: 0.8em;
+}
+
+.hover-expand:hover .expand-content,
+.hover-expand:focus-within .expand-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 

@@ -19,11 +19,13 @@
         :class="{
           'today': isToday(day),
           'selected': isSelected(day),
-          'other-month': day && day.getMonth() !== currentMonth
+          'other-month': day && day.getMonth() !== currentMonth,
+          'has-event': hasEvent(day)
         }"
-        @click="selectDate(day)"
+        @click="handleDateClick(day)"
       >
         <span v-if="day">{{ day.getDate() }}</span>
+        <span v-if="hasEvent(day)" class="event-dot"></span>
       </div>
     </div>
   </div>
@@ -32,7 +34,12 @@
 <script>
 export default {
   name: 'Calendar',
-  props: ['events'],
+  props: {
+    events: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       currentDate: new Date(),
@@ -83,13 +90,22 @@ export default {
     nextMonth() {
       this.currentDate = new Date(this.currentYear, this.currentMonth + 1, 1)
     },
-    selectDate(day) {
-    if (!day) return
-    this.selectedDate = new Date(day)
-    // Emit ISO date string (YYYY-MM-DD)
-    const dateKey = day.toISOString().split('T')[0]
-    this.$emit('date-selected', dateKey)
-  },
+    hasEvent(day) {
+      if (!day) return false
+      const dateKey = day.toISOString().split('T')[0]
+      return this.events.some(e => e.date === dateKey)
+    },
+    handleDateClick(day) {
+      if (!day) return
+      this.selectedDate = new Date(day)
+      const dateKey = day.toISOString().split('T')[0]
+      this.$emit('date-selected', dateKey)
+      // If there's an event for this date, emit event-selected as well
+      const event = this.events.find(e => e.date === dateKey)
+      if (event) {
+        this.$emit('event-selected', event)
+      }
+    },
     isToday(day) {
       if (!day) return false
       const today = new Date()
@@ -98,9 +114,6 @@ export default {
     isSelected(day) {
       if (!day) return false
       return day.toDateString() === this.selectedDate.toDateString()
-    },
-    formatDate(date) {
-      return date.toISOString().split('T')[0]
     }
   }
 }
@@ -155,6 +168,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .calendar-day.today {
   background: #45aaf2;
@@ -167,5 +181,16 @@ export default {
 }
 .calendar-day.other-month {
   opacity: 0.3;
+}
+.calendar-day.has-event .event-dot {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  background: #a3e635;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

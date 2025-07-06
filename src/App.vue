@@ -1,5 +1,21 @@
 <template>
   <div id="app">
+    <!-- Starfield Animated Overlay -->
+    <div class="starfield"></div>
+    <!-- Twinkling Stars Overlay -->
+    <div class="twinkle-stars">
+      <div class="star star-1"></div>
+      <div class="star star-2"></div>
+      <div class="star star-3"></div>
+      <div class="star star-4"></div>
+      <div class="star star-5"></div>
+      <div class="star star-6"></div>
+      <div class="star star-7"></div>
+      <div class="star star-8"></div>
+      <div class="star star-9"></div>
+      <div class="star star-10"></div>
+    </div>
+
     <header class="app-header">
       <div class="hero-header">
         <h1 class="animated-gradient">🌌 Cosmic Almanac</h1>
@@ -8,7 +24,7 @@
     </header>
     <main class="main-content">
       <section class="today-section">
-        <h2>{{ selectedDate === today ? 'Today in Space History' : 'Selected Date Events' }}</h2>
+        <h2>Today in History</h2>
         <div class="today-events">
           <div class="western-event">
             <h3>Western Astronomy</h3>
@@ -20,37 +36,38 @@
               <li v-if="!westernEvents.length">No major astronomical event recorded</li>
             </ul>
           </div>
-          <div class="indian-event tooltip-wrapper">
-            <h3>Indian Panchang</h3>
-            <p><strong>Tithi:</strong> {{ currentPanchang.tithi }}</p>
-            <p><strong>Nakshatra:</strong> {{ currentPanchang.nakshatra }}</p>
-            <p><strong>Yoga:</strong> {{ currentPanchang.yoga }}</p>
-            <!-- Tooltip content -->
-            <div class="tooltip-content">
-              <h4>🔬 Why are Tithi, Nakshatra, and Yoga Scientific?</h4>
-              <ul>
-                <li>
-                  <strong>Tithi</strong> (Lunar Day): Calculated by measuring the exact angular distance (12° increments) between the Sun and Moon. This is a direct application of astronomy and celestial mechanics, not just tradition.
-                </li>
-                <li>
-                  <strong>Nakshatra</strong> (Star Constellation): The Moon’s position is tracked against 27 fixed stars (constellations) on the ecliptic, marking its journey across the sky using real astronomical coordinates.
-                </li>
-                <li>
-                  <strong>Yoga</strong> (Luni-Solar Day): Computed by adding the longitudes of the Sun and Moon and dividing the sum into 27 parts. Each Yoga represents a unique Sun-Moon relationship, reflecting the dynamic geometry of our solar system.
-                </li>
-              </ul>
-              <p class="science-note">
-                <em>These calculations use precise astronomy and mathematics—showing that the Panchang is as much a scientific calendar as a cultural one!</em>
-              </p>
-            </div>
-          </div>
+          <div class="indian-event hover-expand">
+  <h3>Indian Panchang</h3>
+  <p><strong>Tithi:</strong> {{ currentPanchang.tithi }}</p>
+  <p><strong>Nakshatra:</strong> {{ currentPanchang.nakshatra }}</p>
+  <p><strong>Yoga:</strong> {{ currentPanchang.yoga }}</p>
+  <div class="expand-content">
+    <h4>🔬 Are Tithi, Nakshatra, and Yoga Scientific ?</h4>
+    <ul>
+      <li>
+        <strong>Tithi</strong> (Lunar Day): Calculated by measuring the exact angular distance (12° increments) between the Sun and Moon. This is a direct application of astronomy and celestial mechanics, not just tradition.
+      </li>
+      <li>
+        <strong>Nakshatra</strong> (Star Constellation): The Moon’s position is tracked against 27 fixed stars (constellations) on the ecliptic, marking its journey across the sky using real astronomical coordinates.
+      </li>
+      <li>
+        <strong>Yoga</strong> (Luni-Solar Day): Computed by adding the longitudes of the Sun and Moon and dividing the sum into 27 parts. Each Yoga represents a unique Sun-Moon relationship, reflecting the dynamic geometry of our solar system.
+      </li>
+    </ul>
+    <p class="science-note">
+      <em>These calculations use precise astronomy and mathematics—showing that the Panchang is as much a scientific calendar as a cultural one!</em>
+    </p>
+  </div>
+</div>
+
         </div>
       </section>
-      <Calendar @date-selected="onDateSelected" />
+      <Calendar :events="events" @date-selected="onDateSelected" @event-selected="openEventModal" />
       <MythScience :date="selectedDate" />
     </main>
   </div>
 </template>
+
 
 <script>
 import Calendar from './components/Calendar.vue'
@@ -137,12 +154,67 @@ export default {
 </script>
 
 <style>
-/* Modern animated header styles */
+body {
+  background: #0c0c0c;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Starfield Animated Overlay */
+.starfield {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1;
+  background: transparent;
+  background-image: 
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1.5px, transparent 1.5px),
+    radial-gradient(#ffe9c4 1px, transparent 1px),
+    radial-gradient(#d4fbff 1px, transparent 1px);
+  background-size: 
+    100px 100px, 
+    150px 150px, 
+    200px 200px, 
+    250px 250px;
+  background-position: 
+    0 0, 
+    50px 50px, 
+    100px 100px, 
+    150px 150px;
+  animation: moveStars 60s linear infinite;
+  opacity: 0.5;
+}
+
+
+@keyframes moveStars {
+  0% {
+    background-position: 
+      0 0, 
+      50px 50px, 
+      100px 100px, 
+      150px 150px;
+  }
+  100% {
+    background-position: 
+      100px 200px, 
+      200px 150px, 
+      300px 250px, 
+      400px 350px;
+  }
+}
+
+/* Keep your existing styles for header, cards, calendar, etc. */
 .app-header {
   background: transparent;
   padding: 2rem 0 1.2rem 0;
   text-align: center;
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-header {
@@ -196,6 +268,8 @@ export default {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem 0;
+  position: relative;
+  z-index: 2;
 }
 .today-section {
   margin-bottom: 2rem;
@@ -207,10 +281,11 @@ export default {
 }
 .western-event, .indian-event {
   flex: 1;
-  background: #f5f7fa;
+  background: rgba(40, 46, 65, 0.7);
   border-radius: 8px;
   padding: 1rem;
-  color: #2c3e50;
+  color: #e0e7ef;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
 }
 
 .tooltip-wrapper {
@@ -227,7 +302,7 @@ export default {
   border-radius: 10px;
   padding: 1.2rem 1.2rem 1rem 1.2rem;
   position: absolute;
-  z-index: 20;
+  z-index: 2000; /* MUCH higher than any other element */
   top: 110%;
   left: 50%;
   transform: translateX(-50%);
@@ -235,6 +310,7 @@ export default {
   transition: opacity 0.3s;
   font-size: 1rem;
 }
+
 .tooltip-content h4 {
   font-size: 1.35rem;
   font-weight: bold;

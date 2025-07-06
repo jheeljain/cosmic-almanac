@@ -6,176 +6,285 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
-  color: #ffffff;
+  /* JWST image as faint background */
+  background: url('/jwst.jpg') center center/cover no-repeat, #0c0c0c;
   min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  overflow-x: hidden;
+  position: relative;
 }
 
-#app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+body::before {
+  /* Extra dark overlay for transparency control */
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.72);
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* Header Styles */
+/* Starfield Animated Overlay */
+.starfield {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1;
+  background: transparent;
+  background-image: 
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1.5px, transparent 1.5px),
+    radial-gradient(#ffe9c4 1px, transparent 1px),
+    radial-gradient(#d4fbff 1px, transparent 1px);
+  background-size: 
+    120px 120px, 
+    180px 180px, 
+    240px 240px, 
+    320px 320px;
+  background-position: 
+    0 0, 
+    60px 60px, 
+    120px 120px, 
+    180px 180px;
+  animation: moveStars 90s linear infinite;
+  opacity: 0.22;
+}
+
+@keyframes moveStars {
+  0% {
+    background-position: 
+      0 0, 
+      60px 60px, 
+      120px 120px, 
+      180px 180px;
+  }
+  100% {
+    background-position: 
+      180px 360px, 
+      360px 180px, 
+      480px 480px, 
+      640px 640px;
+  }
+}
+
+/* Twinkling Stars Overlay */
+.twinkle-stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  width: 2.5px;
+  height: 2.5px;
+  opacity: 0.85;
+  animation-iteration-count: infinite;
+}
+
+.star-1 { top: 18%; left: 22%; animation: twinkle-1 1.5s ease-in-out infinite; }
+.star-2 { top: 35%; left: 67%; animation: twinkle-2 2.2s ease-in-out infinite; }
+.star-3 { top: 70%; left: 55%; animation: twinkle-1 2.1s ease-in-out infinite; }
+.star-4 { top: 60%; left: 12%; animation: twinkle-2 1.7s ease-in-out infinite; }
+.star-5 { top: 12%; left: 80%; animation: twinkle-1 2.4s ease-in-out infinite; }
+.star-6 { top: 80%; left: 30%; animation: twinkle-2 1.9s ease-in-out infinite; }
+.star-7 { top: 50%; left: 45%; animation: twinkle-1 2.6s ease-in-out infinite; }
+.star-8 { top: 28%; left: 75%; animation: twinkle-2 1.4s ease-in-out infinite; }
+.star-9 { top: 85%; left: 60%; animation: twinkle-1 2.0s ease-in-out infinite; }
+.star-10 { top: 40%; left: 10%; animation: twinkle-2 2.3s ease-in-out infinite; }
+
+@keyframes twinkle-1 {
+  0%, 100% { opacity: 0.95; transform: scale(1);}
+  50% { opacity: 0.3; transform: scale(0.7);}
+}
+@keyframes twinkle-2 {
+  0%, 100% { opacity: 0.8; transform: scale(1);}
+  50% { opacity: 0.2; transform: scale(0.5);}
+}
+
+/* Keep your existing styles for header, cards, calendar, etc. */
 .app-header {
+  background: transparent;
+  padding: 2rem 0 1.2rem 0;
   text-align: center;
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-}
-
-.app-header h1 {
-  font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, #45aaf2, #9b59b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 3;
+}
+
+.hero-header {
+  background: rgba(30, 34, 56, 0.7);
+  border-radius: 18px;
+  display: inline-block;
+  padding: 1.2rem 2.2rem 1.3rem 2.2rem;
+  margin: 0 auto 0.5rem auto;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+  max-width: 700px;
+}
+
+.animated-gradient {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #a3e635, #3b82f6, #a78bfa, #f472b6);
+  background-size: 200% auto;
+  color: transparent;
   background-clip: text;
+  -webkit-background-clip: text;
+  animation: gradient-move 25s linear infinite;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.3rem;
 }
 
-.app-header p {
-  font-size: 1.2rem;
-  color: #b0b0b0;
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
-/* Calendar and Event Styles */
-.calendar-container {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 1.5rem;
+.subtitle {
+  font-size: 1.22rem;
+  color: #e0e7ef;
+  letter-spacing: 0.5px;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+  font-weight: 500;
+  opacity: 0.88;
+}
+
+.fade-in {
+  animation: fadeInSubtitle 1.4s cubic-bezier(0.23, 1, 0.32, 1) 0.2s both;
+}
+
+@keyframes fadeInSubtitle {
+  from { opacity: 0; transform: translateY(18px);}
+  to   { opacity: 0.88; transform: translateY(0);}
+}
+
+.main-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 3;
+}
+.today-section {
   margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
 }
-
-.calendar-header {
+.today-events {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.nav-btn {
-  background: #45aaf2;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.calendar-day {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.8rem 0.4rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  min-height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.calendar-day:hover {
-  background: rgba(69, 170, 242, 0.2);
-}
-
-.calendar-day.today {
-  background: #45aaf2;
-  color: white;
-  font-weight: bold;
-}
-
-.calendar-day.selected {
-  background: #9b59b6;
-  color: white;
-}
-
-/* Event Details */
-.event-detail {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
-}
-
-.event-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+.western-event, .indian-event {
+  flex: 1;
+  background: linear-gradient(135deg, #232946 80%, #9b59b6 100%);
+  border-radius: 14px;
+  padding: 1.3rem 1.6rem 1.2rem 1.6rem;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(69, 170, 242, 0.10), 0 1.5px 10px rgba(155, 89, 182, 0.10);
+  margin: 0 0.5rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #393e6c;
+  position: relative;
 }
 
-.western-detail, .indian-detail {
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+.western-event:hover, .indian-event:hover {
+  box-shadow: 0 12px 36px rgba(69, 170, 242, 0.19), 0 3px 18px rgba(155, 89, 182, 0.15);
+  transform: translateY(-2px) scale(1.025);
+}
+
+.western-event h3, .indian-event h3 {
+  color: #a3e635;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+}
+
+
+@keyframes hoverGlow {
+  0% { box-shadow: 0 0 6px #f472b6, 0 0 0 #fff; }
+  100% { box-shadow: 0 0 16px #f472b6, 0 0 4px #fff; }
+}
+
+
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.tooltip-content {
+  position: fixed !important;
+  left: 50% !important;
+  top: 120px !important; /* Adjust this value to position above the calendar */
+  transform: translateX(-50%);
+  z-index: 5000 !important; /* Ensure this is higher than other elements */
+  background: #232946;
+  color: #fff;
   border-radius: 10px;
-  border-left: 4px solid #45aaf2;
+  padding: 1.2rem 1.2rem 1rem 1.2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  font-size: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  width: 80%; /* Adjust width as needed */
+  max-width: 600px; /* Prevent it from being too wide */
 }
 
-.indian-detail {
-  border-left-color: #9b59b6;
-}
-
-/* Myth vs Science Section */
-.myth-science-section {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-}
-
-.info-box {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-left: 4px solid #9b59b6;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-th, td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-th {
-  background: rgba(69, 170, 242, 0.2);
-  color: #45aaf2;
+.tooltip-content h4 {
+  font-size: 1.35rem;
   font-weight: bold;
+  margin-bottom: 0.7rem;
+  color: #a3e635;
+  line-height: 1.3;
+}
+.tooltip-wrapper:hover .tooltip-content,
+.tooltip-wrapper:focus-within .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+.tooltip-content ul {
+  margin: 0 0 0.5rem 1.2rem;
+  padding: 0;
+}
+.tooltip-content li {
+  margin-bottom: 0.4rem;
+}
+.science-note {
+  color: #a3e635;
+  font-size: 0.97em;
+  margin-top: 0.6em;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .event-content {
-    grid-template-columns: 1fr;
-  }
-  
-  .calendar-day {
-    min-height: 50px;
-    padding: 0.5rem 0.2rem;
-  }
+.hover-expand {
+  position: relative;
+  overflow: hidden;
+  max-height: 160px; /* enough for title + 3 lines */
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  cursor: pointer;
 }
+.hover-expand:hover,
+.hover-expand:focus-within {
+  max-height: 600px; /* enough for all content */
+}
+
+.expand-content {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  margin-top: 0.8em;
+}
+
+.hover-expand:hover .expand-content,
+.hover-expand:focus-within .expand-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+

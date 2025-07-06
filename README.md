@@ -17,3 +17,4 @@
 ## 🛠️ Setup Guide
 
 1. **Clone the repo:**
+git add README.md
